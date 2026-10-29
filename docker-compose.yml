@@ -1,0 +1,40 @@
+name: kantpay-arsen-student-api
+services:
+  db:
+    image: postgres:16
+    container_name: kantpay-arsen-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - kantpay_arsen_pgdata:/var/lib/postgresql/data
+    networks:
+      - kantpay-arsen-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  app:
+    image: kantpay-arsen-student-api:v1.0-kantpay-arsen-37705
+    container_name: kantpay-arsen-student-api
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:8080"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - kantpay-arsen-net
+volumes:
+  kantpay_arsen_pgdata:
+networks:
+  kantpay-arsen-net:
