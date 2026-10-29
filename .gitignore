@@ -1,0 +1,10 @@
+.gradle/
+build/
+.idea/
+*.iml
+.env
+*.log
+logs/*
+!logs/.gitkeep
+backups/*
+!backups/.gitkeep
