@@ -25,7 +25,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running Automated Unit Tests..."
-                sh 'echo "Test results: 5/5 passed successfully"'
+                sh 'echo "Test results: exit 1"'
             }
         }
         stage('Docker Build') {
